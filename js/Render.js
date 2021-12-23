@@ -1,15 +1,13 @@
 export class Render {
-  constructor(array) {
-    this.array = array;
-  }
+  constructor() {}
 
-  render() {
+  render(array) {
     //if (this.array.arrayItems[0] !== undefined) {
-    if (this.array.arrayItems[0] !== undefined) {
+    if (array[0] !== undefined) {
       const nodeUl = document.getElementById("ul");
       while (nodeUl.firstChild) nodeUl.removeChild(nodeUl.firstChild);
-//this.array.arrayItems.forEach((element) => {
-      this.array.arrayItems[0].forEach((element) => {
+      //this.array.arrayItems.forEach((element) => {
+      array.forEach((element) => {
         let listItems = document.querySelector(".listItems");
         let saveBtn = document.createElement("button");
         let inputChange = document.createElement("input");

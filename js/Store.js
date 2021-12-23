@@ -1,51 +1,28 @@
 //class for save items in array and logic
+import { API } from "./API.js";
+const api = new API("http://127.0.0.1:3000/");
 export class Store {
-  constructor(arrayItems) {
-    this.arrayItems = arrayItems || [];
-    this.countId = -1;
+  constructor() {
+    this.array = [];
   }
-  create(item) {
-    this.arrayItems = [...this.arrayItems, item];
-    return this.arrayItems;
+  async create(name) {
+    api.pushToAPI("create", "POST", {
+      name: name,
+      checked: false,
+      deleted: false,
+      editing: false,
+    });
   }
   check(id) {
-    for (let i = 0; i < this.arrayItems.length; i++) {
-      if (this.arrayItems[i].id === +id) {
-        if (this.arrayItems[i].checked === false) {
-          this.arrayItems[i].checked = true;
-        } else if (this.arrayItems[i].checked === true) {
-          this.arrayItems[i].checked = false;
-        }
-      }
-    }
+    api.pushToAPI("checked", "PUT", { id: id });
   }
   delete(id) {
-    for (let i = 0; i < this.arrayItems.length; i++) {
-      if (this.arrayItems[i].id === +id) {
-        // itemsArray.splice(i,1);
-        this.arrayItems[i].deleted = true;
-      }
-    }
+    api.pushToAPI("delete", "DELETE", { id: id });
   }
   change(id) {
-    for (let i = 0; i < this.arrayItems.length; i++) {
-      if (this.arrayItems[i].id === +id) {
-        this.arrayItems[i].editing = true;
-      }
-    }
+    api.pushToAPI("editing", "PUT", { id: id });
   }
   editing(id, chengedName) {
-    for (let i = 0; i < this.arrayItems.length; i++) {
-      if (this.arrayItems[i].id === +id) {
-        this.arrayItems[i].editing = false;
-        if (chengedName !== undefined) {
-          this.arrayItems[i].name = chengedName;
-        }
-      }
-    }
-  }
-  counter() {
-    this.countId++;
-    return this.countId;
+    api.pushToAPI("change", "PUT", { name: chengedName, id: id });
   }
 }
