@@ -5,24 +5,31 @@ export class Store {
   constructor() {
     this.array = [];
   }
+
   async create(name) {
-    api.pushToAPI("create", "POST", {
+    api.callAPI("create", "POST", {
       name: name,
       checked: false,
       deleted: false,
       editing: false,
     });
   }
-  check(id) {
-    api.pushToAPI("checked", "PUT", { id: id });
+  put(route, data) {
+    api.callAPI(route, "PUT", data);
   }
   delete(id) {
-    api.pushToAPI("delete", "DELETE", { id: id });
+    api.callAPI("delete", "DELETE", { id: id });
   }
+
   change(id) {
-    api.pushToAPI("editing", "PUT", { id: id });
+    for (let i = 0; i < this.array.length; i++) {
+      if (this.array[i].id === +id) {
+        this.array[i].editing = true;
+      }
+    }
   }
-  editing(id, chengedName) {
-    api.pushToAPI("change", "PUT", { name: chengedName, id: id });
+
+  async get() {
+    this.array = await api.callAPI("todos", "GET");
   }
 }
