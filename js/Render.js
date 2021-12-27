@@ -14,9 +14,6 @@ export class Render {
         const newItems = document.createElement("li");
         newItems.classList.add("parentPosition");
         newItems.setAttribute("id", element.id);
-        if (element.deleted === true) {
-          newItems.classList.add("deleted");
-        }
         const buttonCheck = document.createElement("input");
         buttonCheck.type = "checkbox";
         buttonCheck.classList.add("check");

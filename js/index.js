@@ -19,15 +19,16 @@ const listItems = document.querySelector(".listItems");
 const emitter = new EventEmitter();
 emitter.on("tasksUpdated", (data) => reRender.render(data));
 document.addEventListener("DOMContentLoaded", async () => {
-  const todos = await api.callAPI("todos", "GET");
-  emitter.emit("tasksUpdated", todos);
+  await store.get();
+  emitter.emit("tasksUpdated", store.arrayTodos);
 });
+
 btnCreate.addEventListener("click", async () => {
   if (inputCreateName.value.trim() !== "") {
     await store.create(inputCreateName.value.trim());
-    const todos = await api.callAPI("todos", "GET");
+    await store.get();
 
-    emitter.emit("tasksUpdated", todos);
+    emitter.emit("tasksUpdated", store.arrayTodos);
   }
 
   inputCreateName.value = "";
@@ -36,8 +37,8 @@ inputCreateName.addEventListener("keydown", async (event) => {
   if (event.keyCode === 13) {
     if (inputCreateName.value.trim() !== "") {
       await store.create(inputCreateName.value.trim());
-      const todos = await api.callAPI("todos", "GET");
-      emitter.emit("tasksUpdated", todos);
+      await store.get();
+      emitter.emit("tasksUpdated", store.arrayTodos);
     }
     inputCreateName.value = "";
   }
@@ -49,33 +50,26 @@ listItems.addEventListener("click", async (event) => {
     const id = event.target.parentElement.getAttribute("id");
     const name = event.target.parentElement.children[1].innerText;
     let checked =
-      event.target.parentElement.children[2].getAttribute("checked");
-    if (checked === null) {
-      checked = true;
-    } else if (checked === true) {
-      checked = false;
-    }
-
+      !!event.target.parentElement.children[2].getAttribute("checked");
     await store.put("put", {
       id: id,
       name: name,
-      checked: checked,
+      checked: !checked,
       deleted: false,
       editing: false,
     });
 
-    const todos = await api.callAPI("todos", "GET");
-    emitter.emit("tasksUpdated", todos);
+    await store.get();
+    emitter.emit("tasksUpdated", store.arrayTodos);
   } else if (event.target.className === "delete") {
     let id = event.target.parentElement.parentElement.getAttribute("id");
     await store.delete(id);
-    const todos = await api.callAPI("todos", "GET");
-    emitter.emit("tasksUpdated", todos);
+    await store.get();
+    emitter.emit("tasksUpdated", store.arrayTodos);
   } else if (event.target.className === "change") {
     let id = event.target.parentElement.parentElement.getAttribute("id");
-    await store.get();
     await store.change(id);
-    emitter.emit("tasksUpdated", await store.array);
+    emitter.emit("tasksUpdated", store.arrayTodos);
   } else if (event.target.className === "saveBtn") {
     const id = event.target.parentElement.parentElement.getAttribute("id");
     const inputChange = event.target.parentElement.parentElement.children[0];
@@ -96,8 +90,9 @@ listItems.addEventListener("click", async (event) => {
         editing: false,
       });
     }
-    const todos = await api.callAPI("todos", "GET");
-    emitter.emit("tasksUpdated", todos);
+
+    await store.get();
+    emitter.emit("tasksUpdated", store.arrayTodos);
   }
 });
 //Keydown for inputChange
@@ -127,3 +122,4 @@ listItems.addEventListener("keydown", async (event) => {
     await store.editing(id, newName);
   }
 });
+store.get();
