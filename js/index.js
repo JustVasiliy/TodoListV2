@@ -3,6 +3,16 @@ import { RenderMainForm } from "./RenderMainForm.js";
 import { Store } from "./Store.js";
 import { EventEmitter } from "./EventEmitter.js";
 import { API } from "./API.js";
+import { getCookie } from "./getCookie.js";
+
+//check authorization
+if (
+  getCookie("token") === "You need registration!" ||
+  getCookie("token") === undefined ||
+  getCookie("token") === ""
+) {
+  window.location = "authOrRegistr.html";
+}
 
 const renderMainForm = new RenderMainForm();
 let api = new API("http://127.0.0.1:3000/");
@@ -123,3 +133,4 @@ listItems.addEventListener("keydown", async (event) => {
   }
 });
 store.get();
+// }
