@@ -21,10 +21,10 @@ export class Store {
       token: token,
     });
     const status = await res.json();
-   
-    if (status.status === 401) {
-      document.cookie = 'token=Invalid token';
-      window.location = 'index.html';
+
+    if (status.message === "Invalid token") {
+      document.cookie = "token=Invalid token";
+      window.location = "index.html";
     }
   }
 
@@ -33,19 +33,18 @@ export class Store {
     const res = await api.callAPI(route, "PUT", token, data);
     const status = await res.json();
     if (status.status === 401) {
-      document.cookie = 'token=Invalid token';
-      window.location = 'index.html';
+      document.cookie = "token=Invalid token";
+      window.location = "index.html";
     }
   }
   async delete(id) {
     const token = getCookie("token");
     const res = await api.callAPI("delete", "DELETE", token, { id: id });
     const status = await res.json();
-    if (status.status === 401) {
-      document.cookie = 'token=Invalid token';
-      window.location = 'index.html';
+    if (status.message === "Invalid token") {
+      document.cookie = "token=Invalid token";
+      window.location = "index.html";
     }
-
   }
 
   change(id) {
@@ -60,13 +59,10 @@ export class Store {
     const token = getCookie("token");
     this.arrayTodos = await api.callAPI("get", "GET", token);
     const status = await api.callAPI("get", "GET", token);
-    
-    if (
-      status.status === 401
-    ) {
-      document.cookie = 'token=Invalid token'
-      window.location = 'index.html'
-      
+
+    if (status.message === "Invalid token") {
+      document.cookie = "token=Invalid token";
+      window.location = "index.html";
     }
     return await this.arrayTodos;
   }

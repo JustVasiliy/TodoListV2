@@ -62,10 +62,10 @@ export class RenderPages {
       
         this.root.appendChild(form);
         form.appendChild(h2);
-        form.appendChild(labelForPassword);
-        form.appendChild(inputPassword);
         form.appendChild(labelForNickname);
         form.appendChild(inputNickname);
+        form.appendChild(labelForPassword);
+        form.appendChild(inputPassword);
         form.appendChild(buttonSend);
     }
     renderRegistration(){

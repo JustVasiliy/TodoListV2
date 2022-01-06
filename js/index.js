@@ -37,19 +37,11 @@ if (
         surname: inputSurname.value,
         nickname: inputNickname.value,
         password: inputPassword.value,
+        id: Math.round(Date.now() / 100 + 30),
       });
 
       document.cookie = `token=${await call.text()}`;
-
-      if (
-        getCookie("token") === "You need registration!" ||
-        getCookie("token") === undefined ||
-        getCookie("token") === ""
-      ) {
-        window.location = "authOrRegistr.html";
-      } else {
-        window.location = "index.html";
-      }
+      window.location = "index.html";
     });
   });
   //authorization
@@ -57,6 +49,7 @@ if (
     //clean DOM
     const nodeUl = document.getElementById("root");
     while (nodeUl.firstChild) nodeUl.removeChild(nodeUl.firstChild);
+
     renderPage.renderAuthorization();
     const btnAuth = document.getElementById("Auth");
     const inputForNickname = document.getElementById("nickname");
@@ -75,15 +68,7 @@ if (
 
       document.cookie = `token=${await call.text()}`;
 
-      if (
-        getCookie("token") === "You need registration!" ||
-        getCookie("token") === undefined ||
-        getCookie("token") === ""
-      ) {
-        window.location = "authOrRegistr.html";
-      } else {
-        window.location = "index.html";
-      }
+      window.location = "index.html";
     }
   });
 } else {
